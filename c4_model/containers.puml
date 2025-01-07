@@ -1,5 +1,5 @@
 @startuml
-!incclude https://raw.githubusercontext.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 AddRelTag("async", $lineStyle = DashedLine())
 
 
@@ -11,9 +11,9 @@ System_Ext(payment_gateway, "Payment Gateway", "Payment Processor")
 System_Boundary(digital_wallet, "Digital Wallet") {
 	Container(spa, "SPA", "React", "Digital Wallet Web App")
 	Container(wallet_core, "Wallet Core", "TS", "Wallet Core is responsible for the transactions")
-	Container(balance_service, "Balance Microservice", "TS", "Resturns customer balance")
+	Container(balance_service, "Balance Microservice", "TS", "Returns customer balance")
 	Container(statement_service "Statement Microservice", "TS", "Returns customer statement")
-	Container(payment_acl, "Patment ACL", "TS", "Anti Corruption Payment Layer")
+	Container(payment_acl, "Payment ACL", "TS", "Anti Corruption Payment Layer")
 
 	ContainerDb(wallet_core_db, "Wallet DB", "MySQL")
 	Rel(wallet_core, wallet_core_db, "Uses", "MySQL Driver")
@@ -24,7 +24,7 @@ System_Boundary(digital_wallet, "Digital Wallet") {
 	ContainerDb(statement_db, "Statement DB", "MySQL")
 	Rel(statement_service, statement_db, "Uses", "MySQL Driver")
 
-	ContainerDb(payment_acl_db, "Payment ACL Db", "MySQL")
+	ContainerDb(payment_acl_db, "Payment ACL DB", "MySQL")
 	Rel(payment_acl, payment_acl_db, "Uses", "MySQL Driver")
 
 	Rel(client, spa, "Uses", "HTTPS")

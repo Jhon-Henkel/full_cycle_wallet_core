@@ -1,5 +1,5 @@
 @startuml
-!incclude https://raw.githubusercontext.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
 title "Digital Wallet Full Cycle"
 
