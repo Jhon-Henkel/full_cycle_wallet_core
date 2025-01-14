@@ -2,6 +2,8 @@ package create_transaction
 
 import (
 	"github.com/Jhon-Henkel/full_cycle_wallet_core/internal/entity"
+	"github.com/Jhon-Henkel/full_cycle_wallet_core/internal/event"
+	"github.com/Jhon-Henkel/full_cycle_wallet_core/pkg/events"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"testing"
@@ -52,7 +54,9 @@ func TestCreateTransactionUseCaseExecute(t *testing.T) {
 		Amount:        100,
 	}
 
-	uc := NewCreateTransactionUseCase(mockTransaction, mockAccount)
+	dispatcher := events.NewEventDispatcher()
+	eventTransactionCreated := event.NewTransactionCreated()
+	uc := NewCreateTransactionUseCase(mockTransaction, mockAccount, dispatcher, eventTransactionCreated)
 	output, err := uc.Execute(input)
 
 	assert.Nil(t, err)

@@ -25,7 +25,7 @@ func NewCreateAccountUseCase(accountGateway gateway.AccountGateway, clientGatewa
 	}
 }
 
-func (uc *CreateAccountUseCase) Execute(inputDTO *CreateAccountInputDTO) (*CreateAccountOutputDTO, error) {
+func (uc *CreateAccountUseCase) Execute(inputDTO CreateAccountInputDTO) (*CreateAccountOutputDTO, error) {
 	client, err := uc.ClientGateway.Get(inputDTO.ClientID)
 	if err != nil {
 		return nil, err
