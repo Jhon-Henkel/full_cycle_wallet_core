@@ -12,10 +12,10 @@ type Webserver struct {
 	WebserverPort string
 }
 
-func NewWebserver(router chi.Router, handlers map[string]http.HandlerFunc, webserverPort string) *Webserver {
+func NewWebserver(webserverPort string) *Webserver {
 	return &Webserver{
-		Router:        router,
-		Handlers:      handlers,
+		Router:        chi.NewRouter(),
+		Handlers:      make(map[string]http.HandlerFunc),
 		WebserverPort: webserverPort,
 	}
 }
