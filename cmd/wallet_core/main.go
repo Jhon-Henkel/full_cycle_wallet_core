@@ -12,6 +12,7 @@ import (
 	"github.com/Jhon-Henkel/full_cycle_wallet_core/internal/web/webserver"
 	"github.com/Jhon-Henkel/full_cycle_wallet_core/pkg/events"
 	_ "github.com/go-sql-driver/mysql"
+	"log"
 )
 
 func main() {
@@ -33,15 +34,16 @@ func main() {
 	createAccountUseCase := create_account.NewCreateAccountUseCase(accountDB, clientDB)
 	createTransactionUseCase := create_transaction.NewCreateTransactionUseCase(transactionDB, accountDB, eventDispatcher, transactionCreatedEvent)
 
-	ws := webserver.NewWebserver("3000")
+	ws := webserver.NewWebserver(":3000")
 
 	clientHandler := web.NewClientHandler(*createClientUseCase)
 	accountHandler := web.NewAccountHandler(*createAccountUseCase)
 	transactionHandler := web.NewTransactionHandler(*createTransactionUseCase)
 
 	ws.AddHandler("/client", clientHandler.CreateClient)
-	ws.AddHandler("/account", accountHandler.CreateAccount)
+	ws.AddHandler("/accounts", accountHandler.CreateAccount)
 	ws.AddHandler("/transaction", transactionHandler.CreateTransaction)
 
+	log.Println("Starting web server on port 3000")
 	ws.Start()
 }

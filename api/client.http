@@ -12,5 +12,5 @@ POST http://localhost:3000/accounts HTTP/1.1
 Content-Type: application/json
 
 {
-    "client_id": ""
+    "client_id": "043e233b-13ee-44de-9364-bd4df35439e9"
 }
