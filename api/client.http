@@ -1,0 +1,16 @@
+POST http://localhost:3000/client HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "go@go.com"
+}
+
+###
+
+POST http://localhost:3000/accounts HTTP/1.1
+Content-Type: application/json
+
+{
+    "client_id": ""
+}
