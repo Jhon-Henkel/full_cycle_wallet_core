@@ -14,3 +14,14 @@ Content-Type: application/json
 {
     "client_id": "043e233b-13ee-44de-9364-bd4df35439e9"
 }
+
+###
+
+POST http://localhost:3000/transactions HTTP/1.1
+Content-Type: application/json
+
+{
+    "account_id_from": "569dbb3d-5bd2-44f0-89e7-5f8d80738491",
+    "account_id_to": "927c20ba-2e83-44bc-aa32-32fd594ff61d",
+    "amount": 50
+}

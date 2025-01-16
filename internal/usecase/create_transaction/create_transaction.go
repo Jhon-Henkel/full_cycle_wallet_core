@@ -7,13 +7,13 @@ import (
 )
 
 type CreateTransactionInputDTO struct {
-	AccountIDFrom string
-	AccountIDTo   string
-	Amount        float64
+	AccountIDFrom string  `json:"account_id_from"`
+	AccountIDTo   string  `json:"account_id_to"`
+	Amount        float64 `json:"amount"`
 }
 
 type CreateTransactionOutputDTO struct {
-	ID string
+	ID string `json:"id"`
 }
 
 type CreateTransactionUseCase struct {
@@ -47,6 +47,14 @@ func (uc *CreateTransactionUseCase) Execute(input CreateTransactionInputDTO) (*C
 		return nil, err
 	}
 	transaction, err := entity.NewTransaction(accountFrom, accountTo, input.Amount)
+	if err != nil {
+		return nil, err
+	}
+	err = uc.AccountGateway.UpdateBalance(accountFrom)
+	if err != nil {
+		return nil, err
+	}
+	err = uc.AccountGateway.UpdateBalance(accountTo)
 	if err != nil {
 		return nil, err
 	}

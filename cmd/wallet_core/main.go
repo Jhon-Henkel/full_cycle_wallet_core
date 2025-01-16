@@ -42,7 +42,7 @@ func main() {
 
 	ws.AddHandler("/client", clientHandler.CreateClient)
 	ws.AddHandler("/accounts", accountHandler.CreateAccount)
-	ws.AddHandler("/transaction", transactionHandler.CreateTransaction)
+	ws.AddHandler("/transactions", transactionHandler.CreateTransaction)
 
 	log.Println("Starting web server on port 3000")
 	ws.Start()
