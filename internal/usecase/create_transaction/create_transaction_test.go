@@ -1,8 +1,10 @@
 package create_transaction
 
 import (
+	"context"
 	"github.com/Jhon-Henkel/full_cycle_wallet_core/internal/entity"
 	"github.com/Jhon-Henkel/full_cycle_wallet_core/internal/event"
+	"github.com/Jhon-Henkel/full_cycle_wallet_core/internal/usecase/mocks"
 	"github.com/Jhon-Henkel/full_cycle_wallet_core/pkg/events"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -41,12 +43,8 @@ func TestCreateTransactionUseCaseExecute(t *testing.T) {
 	accountTwo := entity.NewAccount(clientTwo)
 	accountTwo.Credit(1000)
 
-	mockAccount := &AccountGatewayMock{}
-	mockAccount.On("FindByID", accountOne.ID).Return(accountOne, nil)
-	mockAccount.On("FindByID", accountTwo.ID).Return(accountTwo, nil)
-
-	mockTransaction := &TransactionGatewayMock{}
-	mockTransaction.On("Create", mock.Anything).Return(nil)
+	mockUow := mocks.UowMock{}
+	mockUow.On("Do", mock.Anything).Return(nil)
 
 	input := CreateTransactionInputDTO{
 		AccountIDFrom: accountOne.ID,
@@ -56,14 +54,14 @@ func TestCreateTransactionUseCaseExecute(t *testing.T) {
 
 	dispatcher := events.NewEventDispatcher()
 	eventTransactionCreated := event.NewTransactionCreated()
-	uc := NewCreateTransactionUseCase(mockTransaction, mockAccount, dispatcher, eventTransactionCreated)
-	output, err := uc.Execute(input)
+	ctx := context.Background()
+
+	uc := NewCreateTransactionUseCase(&mockUow, dispatcher, eventTransactionCreated)
+	output, err := uc.Execute(ctx, input)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, output)
 
-	mockAccount.AssertExpectations(t)
-	mockAccount.AssertNumberOfCalls(t, "FindByID", 2)
-	mockTransaction.AssertExpectations(t)
-	mockTransaction.AssertNumberOfCalls(t, "Create", 1)
+	mockUow.AssertExpectations(t)
+	mockUow.AssertNumberOfCalls(t, "Do", 1)
 }
