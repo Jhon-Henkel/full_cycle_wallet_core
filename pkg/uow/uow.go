@@ -35,7 +35,7 @@ func (u *Uow) Register(name string, fc RepositoryFactory) {
 	u.Repositories[name] = fc
 }
 
-func (u *Uow) UnRegister(name string) {
+func (u *Uow) Unregister(name string) {
 	delete(u.Repositories, name)
 }
 

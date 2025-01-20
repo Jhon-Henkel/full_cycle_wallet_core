@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"github.com/Jhon-Henkel/full_cycle_wallet_core/internal/database"
@@ -11,6 +12,7 @@ import (
 	"github.com/Jhon-Henkel/full_cycle_wallet_core/internal/web"
 	"github.com/Jhon-Henkel/full_cycle_wallet_core/internal/web/webserver"
 	"github.com/Jhon-Henkel/full_cycle_wallet_core/pkg/events"
+	"github.com/Jhon-Henkel/full_cycle_wallet_core/pkg/uow"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 )
@@ -28,11 +30,19 @@ func main() {
 
 	clientDB := database.NewClientDB(db)
 	accountDB := database.NewAccountDB(db)
-	transactionDB := database.NewTransactionDB(db)
+
+	ctx := context.Background()
+	unitOfWork := uow.NewUow(ctx, db)
+	unitOfWork.Register("accountDB", func(tx *sql.Tx) interface{} {
+		return database.NewAccountDB(db)
+	})
+	unitOfWork.Register("transactionDB", func(tx *sql.Tx) interface{} {
+		return database.NewTransactionDB(db)
+	})
 
 	createClientUseCase := create_client.NewCreateClientUseCase(clientDB)
 	createAccountUseCase := create_account.NewCreateAccountUseCase(accountDB, clientDB)
-	createTransactionUseCase := create_transaction.NewCreateTransactionUseCase(transactionDB, accountDB, eventDispatcher, transactionCreatedEvent)
+	createTransactionUseCase := create_transaction.NewCreateTransactionUseCase(unitOfWork, eventDispatcher, transactionCreatedEvent)
 
 	ws := webserver.NewWebserver(":3000")
 

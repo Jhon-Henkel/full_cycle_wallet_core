@@ -35,6 +35,11 @@ func (m *AccountGatewayMock) Save(client *entity.Account) error {
 	return args.Error(0)
 }
 
+func (m *AccountGatewayMock) UpdateBalance(client *entity.Account) error {
+	args := m.Called(client)
+	return args.Error(0)
+}
+
 func TestCreateAccountUseCaseExecute(t *testing.T) {
 	client, _ := entity.NewClient("John Doe", "go@go.com")
 	clientMock := &ClientGatewayMock{}
