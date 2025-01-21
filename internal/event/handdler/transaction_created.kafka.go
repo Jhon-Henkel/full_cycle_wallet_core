@@ -8,17 +8,17 @@ import (
 )
 
 type TransactionCreatedKafkaHandler struct {
-	kafka *kafka.Producer
+	Kafka *kafka.Producer
 }
 
 func NewTransactionCreatedKafkaHandler(kafka *kafka.Producer) *TransactionCreatedKafkaHandler {
 	return &TransactionCreatedKafkaHandler{
-		kafka: kafka,
+		Kafka: kafka,
 	}
 }
 
 func (h *TransactionCreatedKafkaHandler) Handle(message events.EventInterface, wg *sync.WaitGroup) {
 	defer wg.Done()
-	h.kafka.Publish(message, nil, "transactions")
+	h.Kafka.Publish(message, nil, "transactions")
 	fmt.Println("TransactionCreatedKafkaHandler: ", message)
 }
