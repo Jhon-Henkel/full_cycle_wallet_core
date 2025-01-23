@@ -41,17 +41,18 @@ func main() {
 	accountDB := database.NewAccountDB(db)
 
 	ctx := context.Background()
-	unitOfWork := uow.NewUow(ctx, db)
-	unitOfWork.Register("accountDB", func(tx *sql.Tx) interface{} {
+	uow := uow.NewUow(ctx, db)
+
+	uow.Register("AccountDB", func(tx *sql.Tx) interface{} {
 		return database.NewAccountDB(db)
 	})
-	unitOfWork.Register("transactionDB", func(tx *sql.Tx) interface{} {
+	uow.Register("TransactionDB", func(tx *sql.Tx) interface{} {
 		return database.NewTransactionDB(db)
 	})
 
 	createClientUseCase := create_client.NewCreateClientUseCase(clientDB)
 	createAccountUseCase := create_account.NewCreateAccountUseCase(accountDB, clientDB)
-	createTransactionUseCase := create_transaction.NewCreateTransactionUseCase(unitOfWork, eventDispatcher, transactionCreatedEvent)
+	createTransactionUseCase := create_transaction.NewCreateTransactionUseCase(uow, eventDispatcher, transactionCreatedEvent)
 
 	ws := webserver.NewWebserver(":8080")
 
