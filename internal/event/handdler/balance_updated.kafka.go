@@ -1,7 +1,6 @@
 package handdler
 
 import (
-	"fmt"
 	"github.com/Jhon-Henkel/full_cycle_wallet_core/pkg/events"
 	"github.com/Jhon-Henkel/full_cycle_wallet_core/pkg/kafka"
 	"sync"
@@ -19,6 +18,8 @@ func NewBalanceUpdatedKafkaHandler(kafka *kafka.Producer) *BalanceUpdatedKafkaHa
 
 func (h *BalanceUpdatedKafkaHandler) Handle(message events.EventInterface, wg *sync.WaitGroup) {
 	defer wg.Done()
-	h.Kafka.Publish(message, nil, "balances")
-	fmt.Println("BalanceUpdatedKafkaHandler: ", message)
+	err := h.Kafka.Publish(message, nil, "balances")
+	if err != nil {
+		panic(err)
+	}
 }

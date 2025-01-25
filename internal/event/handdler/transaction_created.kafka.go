@@ -1,7 +1,6 @@
 package handdler
 
 import (
-	"fmt"
 	"github.com/Jhon-Henkel/full_cycle_wallet_core/pkg/events"
 	"github.com/Jhon-Henkel/full_cycle_wallet_core/pkg/kafka"
 	"sync"
@@ -19,6 +18,8 @@ func NewTransactionCreatedKafkaHandler(kafka *kafka.Producer) *TransactionCreate
 
 func (h *TransactionCreatedKafkaHandler) Handle(message events.EventInterface, wg *sync.WaitGroup) {
 	defer wg.Done()
-	h.Kafka.Publish(message, nil, "transactions")
-	fmt.Println("TransactionCreatedKafkaHandler: ", message)
+	err := h.Kafka.Publish(message, nil, "transactions")
+	if err != nil {
+		panic(err)
+	}
 }
