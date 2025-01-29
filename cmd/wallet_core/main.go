@@ -27,6 +27,27 @@ func main() {
 	}
 	defer db.Close()
 
+	db.Exec("CREATE TABLE IF NOT EXISTS clients (id varchar(255), name varchar(255), email varchar(255), created_at date)")
+	db.Exec("CREATE TABLE IF NOT EXISTS accounts (id varchar(255), client_id varchar(255), balance float, created_at date)")
+	db.Exec("CREATE TABLE IF NOT EXISTS transactions (id varchar(255), account_id_from varchar(255), account_id_to varchar(255), amount float, created_at date)")
+	db.Exec("CREATE TABLE IF NOT EXISTS balances (id varchar(255), account_id varchar(255), amount float, created_at datetime)")
+
+	db.Exec("TRUNCATE clients")
+	db.Exec("TRUNCATE accounts")
+	db.Exec("TRUNCATE transactions")
+	db.Exec("TRUNCATE balances")
+
+	db.Exec("INSERT INTO clients (id, name, email, created_at) VALUES ('043e233b-13ee-44de-9364-bd4df35439e9', 'John Doe', 'go@go.com', '2025-01-01')")
+	db.Exec("INSERT INTO clients (id, name, email, created_at) VALUES ('b0ea1f9a-b671-4862-97bd-1bb433f7412a', 'Gina', 'go-horse@go-horse.com', '2025-01-01')")
+
+	db.Exec("INSERT INTO accounts (id, client_id, balance, created_at) VALUES ('569dbb3d-5bd2-44f0-89e7-5f8d80738491', '043e233b-13ee-44de-9364-bd4df35439e9', 900, '2025-01-01')")
+	db.Exec("INSERT INTO accounts (id, client_id, balance, created_at) VALUES ('927c20ba-2e83-44bc-aa32-32fd594ff61d', 'b0ea1f9a-b671-4862-97bd-1bb433f7412a', 1100, '2025-01-01')")
+
+	db.Exec("INSERT INTO transactions (id, account_id_from, account_id_to, amount, created_at) VALUES ('9ea1bfbe-9ffb-4506-a211-1d56d1bda103', '569dbb3d-5bd2-44f0-89e7-5f8d80738491', '927c20ba-2e83-44bc-aa32-32fd594ff61d', 100, '2025-01-01')")
+
+	db.Exec("INSERT INTO balances (id, account_id, amount, created_at) VALUES ('3e53df66-ddbe-11ef-b099-0242ac120003', '569dbb3d-5bd2-44f0-89e7-5f8d80738491', 900, '2025-01-01 00:00:00')")
+	db.Exec("INSERT INTO balances (id, account_id, amount, created_at) VALUES ('927c20ba-2e83-44bc-aa32-32fd594ff61e', '927c20ba-2e83-44bc-aa32-32fd594ff61d', 1100, '2025-01-01 00:00:00')")
+
 	configMap := ckafka.ConfigMap{"bootstrap.servers": "kafka:29092"}
 	kafkaProducer := kafka.NewKafkaProducer(&configMap)
 

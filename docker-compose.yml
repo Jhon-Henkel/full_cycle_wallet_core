@@ -27,7 +27,7 @@ services:
       - .:/app
     ports:
       - "3003:3003"
-#    command: [ "go", "run", "cmd/wallet_balance/main.go" ]
+    command: [ "go", "run", "cmd/wallet_balance/main.go" ]
 
   zookeeper:
     image: "confluentinc/cp-zookeeper:6.1.0"

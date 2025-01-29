@@ -85,8 +85,8 @@ func (uc *CreateTransactionUseCase) Execute(ctx context.Context, input CreateTra
 		output.AccountIDTo = input.AccountIDTo
 		output.Amount = input.Amount
 
-		balanceUpdatesOutput.AccountIDFrom = input.AccountIDFrom
-		balanceUpdatesOutput.AccountIDTo = input.AccountIDTo
+		balanceUpdatesOutput.AccountIDFrom = accountFrom.ID
+		balanceUpdatesOutput.AccountIDTo = accountTo.ID
 		balanceUpdatesOutput.BalanceAccountIDFrom = accountFrom.Balance
 		balanceUpdatesOutput.BalanceAccountIDTo = accountTo.Balance
 
